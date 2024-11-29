@@ -1,5 +1,5 @@
 from Heuristic.heuristics_factory import HeuristicsFactory
-
+from Tree import Node
 class MiniMax:
     def __init__(self, heuristic, board, player, max_depth):
         self.heuristic = heuristic
@@ -8,14 +8,18 @@ class MiniMax:
         self.max_depth = max_depth
         self.sign = 1 if player == 1 else -1
         self.best_move = None
+        self.root = None
     
-    def maximize(self, board, depth):
+    def maximize(self, board, depth, root):
         pass
-    def minimize(self, board, depth):
+    def minimize(self, board, depth, root):
         pass
     def minimax(self, board, depth):
-        score, move = self.maximize(board, depth)
+        root = Node(float('-inf'), "MAX")
+        score, move = self.maximize(board, depth, root)
         self.best_move = move
+        self.root = root
+        print(root.visualize())
         return move
 
     def is_terminal(self, board):
