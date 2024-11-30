@@ -17,6 +17,7 @@ class MiniMaxWoPruning(MiniMax):
             new_board = self.make_move(board, move, self.player)
             child = Node(float('inf'), "MIN")
             root.add_successor(child)
+            self.nodes_expanded += 1
             score, _ = self.minimize(new_board, depth - 1, child)
             if score > max_score:
                 max_score = score
@@ -36,6 +37,7 @@ class MiniMaxWoPruning(MiniMax):
             new_board = self.make_move(board, move, self.opponent(self.player))
             child = Node(float('-inf'), "MAX")
             root.add_successor(child)
+            self.nodes_expanded += 1
             score, _ = self.maximize(new_board, depth - 1, child)
             if score < min_score:
                 min_score = score

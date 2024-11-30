@@ -9,6 +9,7 @@ class MiniMax:
         self.sign = 1 if player == 1 else -1
         self.best_move = None
         self.root = None
+        self.nodes_expanded = 0
     
     def maximize(self, board, depth, root):
         pass
@@ -16,6 +17,7 @@ class MiniMax:
         pass
     def minimax(self, board, depth):
         root = Node(float('-inf'), "MAX")
+        self.nodes_expanded += 1
         score, move = self.maximize(board, depth, root)
         self.best_move = move
         self.root = root
