@@ -4,7 +4,7 @@ export default {
   data() {
     return {
       selectedAlgorithm: 1,
-      firstPlayer: 1,
+      aiAgent: 2,
       searchDepth: 0
     }
   },
@@ -12,7 +12,7 @@ export default {
     startGame() {
       this.$emit('gameStart', {
         algorithm: this.selectedAlgorithm,
-        firstPlayer: this.firstPlayer,
+        aiAgent: this.aiAgent,
         depth: this.searchDepth
       })
     },
@@ -75,14 +75,14 @@ export default {
         <h3 class="section-title">Who starts?</h3>
         <div class="button-group">
           <button 
-            :class="['start-btn', firstPlayer === 1 ? 'active' : '']"
-            @click="firstPlayer = 1"
+            :class="['start-btn', aiAgent === 2 ? 'active' : '']"
+            @click="aiAgent = 2"
           >
             Player Starts
           </button>
           <button 
-            :class="['start-btn', firstPlayer === 2 ? 'active' : '']"
-            @click="firstPlayer = 2"
+            :class="['start-btn', aiAgent === 1 ? 'active' : '']"
+            @click="aiAgent = 1"
           >
             AI Starts
           </button>

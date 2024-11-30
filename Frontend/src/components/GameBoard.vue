@@ -89,29 +89,11 @@ export default {
       // console.log(JSON.stringify(board.value, null, 2))
       // console.log(JSON.stringify(props.settings.value, null, 2))
 
-      gameService.sendGameInfoToBackend(board.value, props.settings)
-      // initGame()
+      // gameService.sendGameInfoToBackend(board.value, props.settings)
+      // const response =  gameService.sendGameInfoToBackend(board.value, props.settings)
+      updateValues()
     })
-    // const initGame = async () => {
-    //   console.log("Initializing game with settings:", props.settings)
-    //   isProcessing.value = true
-    //   const response = await gameService.initializeGame(props.settings)
-      
-    //   if (response) {
-    //     board.value = response.board
-    //     currentPlayer.value = response.currentPlayer
-    //     playerScore.value = response.playerScore
-    //     aiScore.value = response.aiScore
-    //     gameStatus.value = currentPlayer.value === 1 ? 'Your Turn' : 'AI Turn'
-        
-    //     if (currentPlayer.value === 2) {
-    //       // If AI starts, make the first move
-    //       await makeMove()
-    //     }
-    //   }
-      
-    //   isProcessing.value = false
-    // }
+    
 
     const newGame = () => {
       showMenu.value = true
@@ -126,24 +108,35 @@ export default {
       isProcessing.value = true
       board.value[row][col] = 1 // Player move
       
-      // Send move to backend and wait for AI response
-          console.log(JSON.stringify(props.settings, null, 2))
-          console.log(JSON.stringify(props.settings, null, 2))
+      updateValues();
 
-      const response = await gameService.sendGameInfoToBackend(board.value, currentPlayer.value)
+      // Send move to backend and wait for AI response
+      // console.log(JSON.stringify(props.settings, null, 2))
+      // console.log(JSON.stringify(props.settings, null, 2))
+
+      // const response = await gameService.sendGameInfoToBackend(board.value, currentPlayer.value)
+      // if (response) {
+      //   board.value = response.board
+      //   playerScore.value = response.playerScore
+      //   aiScore.value = response.aiScore
+      //   expandedNodes.value = response.expandedNodes
+
+      //   // Update tree visualization here when implemented
+      // }
       
+      isProcessing.value = false
+      gameStatus.value = 'Your Turn'
+    }
+
+    const updateValues = async () => {
+      const response = await gameService.sendGameInfoToBackend(board.value,props.settings)
       if (response) {
         board.value = response.board
         playerScore.value = response.playerScore
         aiScore.value = response.aiScore
         expandedNodes.value = response.expandedNodes
-        // Update tree visualization here when implemented
       }
-      
-      isProcessing.value = false
-      gameStatus.value = 'Your Turn'
     }
-    
     const isValidMove = (col) => {
       return col >= 0 && col < 7 && board.value[0][col] === 0
     }
