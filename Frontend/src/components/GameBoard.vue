@@ -20,7 +20,7 @@
         <div 
           v-if="currentPlayer === 1 && hoveredColumn !== -1 && !isProcessing" 
           class="hover-disc player-disc"
-          :style="{ left: `${hoveredColumn * 80 + 20  }px` }"
+          :style="{ left: `${hoveredColumn * 80 + 22  }px` }"
         ></div>
         
         <div class="board">
