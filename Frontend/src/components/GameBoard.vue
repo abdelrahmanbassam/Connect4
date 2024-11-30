@@ -20,7 +20,7 @@
         <div 
           v-if="currentPlayer === 1 && hoveredColumn !== -1 && !isProcessing" 
           class="hover-disc player-disc"
-          :style="{ left: `${hoveredColumn * 70 + 5}px` }"
+          :style="{ left: `${hoveredColumn * 80 + 20  }px` }"
         ></div>
         
         <div class="board">
@@ -86,28 +86,33 @@ export default {
     // Initialize game with settings
     onMounted(() => {
       console.log('GameBoard mounted')
-      initGame()
+      // console.log(JSON.stringify(board.value, null, 2))
+      // console.log(JSON.stringify(props.settings.value, null, 2))
+
+      gameService.sendGameInfoToBackend(board.value, props.settings)
+      // initGame()
     })
-    const initGame = async () => {
-      console.log("Initializing game with settings:", props.settings)
-      isProcessing.value = true
-      const response = await gameService.initializeGame(props.settings)
+    // const initGame = async () => {
+    //   console.log("Initializing game with settings:", props.settings)
+    //   isProcessing.value = true
+    //   const response = await gameService.initializeGame(props.settings)
       
-      if (response) {
-        board.value = response.board
-        currentPlayer.value = response.currentPlayer
-        playerScore.value = response.playerScore
-        aiScore.value = response.aiScore
-        gameStatus.value = currentPlayer.value === 1 ? 'Your Turn' : 'AI Turn'
+    //   if (response) {
+    //     board.value = response.board
+    //     currentPlayer.value = response.currentPlayer
+    //     playerScore.value = response.playerScore
+    //     aiScore.value = response.aiScore
+    //     gameStatus.value = currentPlayer.value === 1 ? 'Your Turn' : 'AI Turn'
         
-        if (currentPlayer.value === 2) {
-          // If AI starts, make the first move
-          await makeAIMove()
-        }
-      }
+    //     if (currentPlayer.value === 2) {
+    //       // If AI starts, make the first move
+    //       await makeMove()
+    //     }
+    //   }
       
-      isProcessing.value = false
-    }
+    //   isProcessing.value = false
+    // }
+
     const newGame = () => {
       showMenu.value = true
     }
@@ -122,7 +127,10 @@ export default {
       board.value[row][col] = 1 // Player move
       
       // Send move to backend and wait for AI response
-      const response = await gameService.sendBoardToBackend(board.value, currentPlayer.value)
+          console.log(JSON.stringify(props.settings, null, 2))
+          console.log(JSON.stringify(props.settings, null, 2))
+
+      const response = await gameService.sendGameInfoToBackend(board.value, currentPlayer.value)
       
       if (response) {
         board.value = response.board

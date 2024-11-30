@@ -1,42 +1,50 @@
 export const gameService = {
-  async initializeGame(settings) {
-    try {
-      // Commented for now until backend is ready
-      /* const response = await fetch('/api/game/initialize', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          algorithm: settings.algorithm,
-          firstPlayer: settings.firstPlayer
-        })
-      });
+  // async initializeGame(settings) {
+  //   try {
+  //     // Commented for now until backend is ready
+  //     /* const response = await fetch('/api/game/initialize', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         algorithm: settings.algorithm,
+  //         firstPlayer: settings.firstPlayer
+  //       })
+  //     });
       
-      const data = await response.json();
-      return {
-        board: data.board,
-        currentPlayer: data.currentPlayer,
-        playerScore: data.playerScore,
-        aiScore: data.aiScore,
-        gameTree: data.gameTree
-      }; */
+  //     const data = await response.json();
+  //     return {
+  //       board: data.board,
+  //       currentPlayer: data.currentPlayer,
+  //       playerScore: data.playerScore,
+  //       aiScore: data.aiScore,
+  //       gameTree: data.gameTree
+  //     }; */
 
-      // Temporary mock response
-      return {
-        board: Array(6).fill().map(() => Array(7).fill(0)),
-        currentPlayer: settings.firstPlayer === 'player' ? 1 : 2,
-        playerScore: 0,
-        aiScore: 0,
-        gameTree: null
-      };
-    } catch (error) {
-      console.error('Error initializing game:', error);
-      return null;
-    }
-  },
-  async sendBoardToBackend(board) {
+  //     // Temporary mock response
+  //     return {
+  //       board: Array(6).fill().map(() => Array(7).fill(0)),
+  //       currentPlayer: settings.firstPlayer === 'player' ? 1 : 2,
+  //       playerScore: 0,
+  //       aiScore: 0,
+  //       gameTree: null
+  //     };
+  //   } catch (error) {
+  //     console.error('Error initializing game:', error);
+  //     return null;
+  //   }
+  // },
+  async sendGameInfoToBackend(board,settings) {
     try {
+      let body ={
+        board: board,
+        algorithm: settings.algorithm,
+        firstPlayer: settings.firstPlayer,
+        depth: settings.depth
+      }
+      console.log(JSON.stringify(body, null, 2))
+     
       // Commented for now until backend is ready
       /* const response = await fetch('/api/game/move', {
         method: 'POST',
@@ -45,7 +53,7 @@ export const gameService = {
         },
         body: JSON.stringify({
           board,
-          currentPlayer
+          
         })
       });
       

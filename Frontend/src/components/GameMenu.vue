@@ -1,3 +1,31 @@
+<script>
+export default {
+  name: 'GameMenu',
+  data() {
+    return {
+      selectedAlgorithm: 1,
+      firstPlayer: 1,
+      searchDepth: 0
+    }
+  },
+  methods: {
+    startGame() {
+      this.$emit('gameStart', {
+        algorithm: this.selectedAlgorithm,
+        firstPlayer: this.firstPlayer,
+        depth: this.searchDepth
+      })
+    },
+    updateDepth(event) {
+      const value = parseInt(event.target.value)
+      if (value >= 0 && value <= 42) {
+        this.searchDepth = value
+      }
+    }
+  }
+}
+</script>
+
 <template>
   <div class="menu-container">
     <h1 class="title">Connect Four</h1>
@@ -8,20 +36,20 @@
         <h3 class="section-title">Algorithm</h3>
         <div class="button-group">
           <button 
-            :class="['algorithm-btn', selectedAlgorithm === 'minimax' ? 'active' : '']"
-            @click="selectedAlgorithm = 'minimax'"
+            :class="['algorithm-btn', selectedAlgorithm === 1 ? 'active' : '']"
+            @click="selectedAlgorithm = 1"
           >
             Minimax
           </button>
           <button 
-            :class="['algorithm-btn', selectedAlgorithm === 'minimax-pruning' ? 'active' : '']"
-            @click="selectedAlgorithm = 'minimax-pruning'"
+            :class="['algorithm-btn', selectedAlgorithm === 2 ? 'active' : '']"
+            @click="selectedAlgorithm = 2"
           >
             Minimax with Pruning
           </button>
           <button 
-            :class="['algorithm-btn', selectedAlgorithm === 'expectimax' ? 'active' : '']"
-            @click="selectedAlgorithm = 'expectimax'"
+            :class="['algorithm-btn', selectedAlgorithm === 3 ? 'active' : '']"
+            @click="selectedAlgorithm = 3"
           >
             Expected Minimax
           </button>
@@ -29,17 +57,32 @@
       </div>
 
       <div class="section">
+        <h3 class="section-title">Search Depth</h3>
+        <div class="depth-selector">
+          <input 
+            type="number" 
+            :value="searchDepth"
+            @input="updateDepth"
+            min="0"
+            max="42"
+            class="depth-input"
+          />
+          <span class="depth-hint">Choose between 0-42</span>
+        </div>
+      </div>
+
+      <div class="section">
         <h3 class="section-title">Who starts?</h3>
         <div class="button-group">
           <button 
-            :class="['start-btn', firstPlayer === 'player' ? 'active' : '']"
-            @click="firstPlayer = 'player'"
+            :class="['start-btn', firstPlayer === 1 ? 'active' : '']"
+            @click="firstPlayer = 1"
           >
             Player Starts
           </button>
           <button 
-            :class="['start-btn', firstPlayer === 'ai' ? 'active' : '']"
-            @click="firstPlayer = 'ai'"
+            :class="['start-btn', firstPlayer === 2 ? 'active' : '']"
+            @click="firstPlayer = 2"
           >
             AI Starts
           </button>
@@ -52,27 +95,6 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'GameMenu',
-  data() {
-    return {
-      selectedAlgorithm: 'minimax',
-      firstPlayer: 'player'
-    }
-  },
-  methods: {
-    startGame() {
-      console.log('Game started with', this.selectedAlgorithm, 'algorithm and', this.firstPlayer, 'starting first')
-      this.$emit('gameStart', {
-        algorithm: this.selectedAlgorithm,
-        firstPlayer: this.firstPlayer,
-      })
-    }
-  }
-}
-</script>
 
 <style scoped>
 .menu-container {
@@ -132,6 +154,27 @@ export default {
 .algorithm-btn.active, .start-btn.active {
   background: #4CAF50;
   color: white;
+}
+
+.depth-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.depth-input {
+  width: 100px;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  border: 2px solid #4CAF50;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.depth-hint {
+  color: #666;
+  font-size: 0.9rem;
 }
 
 .start-game-btn {
