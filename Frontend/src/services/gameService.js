@@ -25,7 +25,10 @@ export const gameService = {
         playerScore: (settings.aiTurn === 2) ? data.player1_score : data.player2_score,
         aiScore: (settings.aiTurn === 1) ? data.player1_score : data.player2_score,
         expandedNodes: data.nodes_expanded,
-        gameTree: data.tree
+        gameTree: {
+          nodes: data.tree.nodes,
+          edges: data.tree.edges
+        }
       };
     } catch (error) {
       console.error('Error sending move to backend:', error);

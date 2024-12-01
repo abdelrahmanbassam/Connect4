@@ -25,13 +25,14 @@ def make_move():
         board = algorithm.make_move(board, best_move, turn)
         player1_score = heuristic.count_fours(board, 1)
         player2_score = heuristic.count_fours(board, 2)
+        tree = algorithm.tree_to_graph(algorithm.root)
 
         return jsonify({
             "board": board,
             "player1_score": player1_score,
             "player2_score": player2_score,
             "nodes_expanded": nodes_expanded,
-            "tree": " "
+            "tree": tree
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500

@@ -49,7 +49,7 @@
         </div>
       </div>
 
-      <TreeVisualization class="tree-viz" />
+      <TreeVisualization class="tree-viz" :treeData="treeData" />
     </div>
   </div>
 </template>
@@ -83,7 +83,7 @@ export default {
     const gameStatus = ref('Your Turn')
     const hoveredColumn = ref(-1)
     const isProcessing = ref(false)
-   
+    const treeData = ref(null); // Ref to hold dynamic game tree data
     // Initialize game with settings
     onMounted(() => {
       // console.log('GameBoard mounted')
@@ -122,6 +122,8 @@ export default {
         playerScore.value = response.playerScore
         aiScore.value = response.aiScore
         expandedNodes.value = response.expandedNodes
+        treeData.value = response.gameTree
+        console.log(treeData.value)
       }
     }
     const isValidMove = (col) => {
@@ -159,7 +161,8 @@ export default {
       hoveredColumn,
       handleMouseMove,
       handleMouseLeave,
-      isProcessing
+      isProcessing,
+      treeData
     }
   }
 }

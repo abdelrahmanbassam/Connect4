@@ -40,3 +40,36 @@ class MiniMax:
     
     def opponent(self, player):
         return 1 if player == 2 else 2
+    def tree_to_graph(self, root):
+        nodes = {}
+        edges = {}
+        node_counter = 1
+        edge_counter = 1
+
+        def traverse(node, parent_id=None):
+            nonlocal node_counter, edge_counter
+
+            # Create a unique node ID
+            current_node_id = f"node{node_counter}"
+            node_counter += 1
+
+            # Add current node to the nodes dictionary with `value` as `name` and `type`
+            nodes[current_node_id] = {
+                "name": str(node.value),  # Convert the value to string for the name
+                "type": node.type,        # Add type (min/max)
+                "icon": "&#xe5c7" if node.type == "MAX" else "&#xe5c5" if node.type == "MIN" else "&#xef4a"
+            }
+
+            # If there's a parent, add an edge from the parent to the current node
+            if parent_id is not None:
+                edge_id = f"edge{edge_counter}"
+                edges[edge_id] = {"source": parent_id, "target": current_node_id}
+                edge_counter += 1
+
+            # Traverse child nodes
+            for successor in node.successors:
+                traverse(successor, current_node_id)
+
+        # Start traversal from the root
+        traverse(root)
+        return {"nodes": nodes, "edges": edges}

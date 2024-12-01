@@ -13,7 +13,31 @@
         :edges="data.edges"
         :layouts="data.layouts"
         :configs="configs"
+      >
+      <defs>
+      <!-- Cannot use <style> directly due to restrictions of Vue. -->
+      <component is="style">
+        @font-face { font-family: 'Material Icons'; font-style: normal; font-weight:
+        400; src:
+        url(https://fonts.gstatic.com/s/materialicons/v97/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2)
+        format('woff2'); }
+      </component>
+    </defs>
+        <!-- Replace the node component -->
+        <template #override-node="{ nodeId, scale, config, ...slotProps }">
+      <circle :r="config.radius * scale" :fill="config.color" v-bind="slotProps" />
+      <!-- Use v-html to interpret escape sequences for icon characters. -->
+      <text
+        font-family="Material Icons"
+        :font-size="22 * scale"
+        fill="#ffffff"
+        text-anchor="middle"
+        dominant-baseline="central"
+        style="pointer-events: none"
+        v-html="data.nodes[nodeId].icon"
       />
+    </template>
+    </v-network-graph>
     </div>
   </div>
 </template>
@@ -21,14 +45,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import * as vNG from "v-network-graph";
-import data from "./data";
-
+import staticData from "./data";
+import { reactive, watch } from "vue";
 // dagre: Directed graph layout for JavaScript
 // https://github.com/dagrejs/dagre
 //@ts-ignore
 import dagre from "dagre/dist/dagre.min.js";
 
-const nodeSize = 40;
+const nodeSize = 30;
 
 const configs = vNG.defineConfigs({
   view: {
@@ -37,26 +61,43 @@ const configs = vNG.defineConfigs({
   },
   node: {
     normal: { radius: nodeSize / 2 },
-    label: { direction: "center", color: "#fff" },
+    label: { direction: "north", color: "#fff", lineHeight: 1.5 },
   },
   edge: {
     normal: {
       color: "#aaa",
       width: 3,
     },
-    margin: 4,
+    margin: 2,
     marker: {
       target: {
         type: "arrow",
-        width: 4,
-        height: 4,
+        width: 3,
+        height: 3,
       },
     },
   },
 });
 
 const graph = ref<vNG.VNetworkGraphInstance>();
+// Props
+const props = defineProps<{ treeData: { nodes: any; edges: any } | null }>();
 
+// Use the initial data from `data.ts`
+const data = reactive({
+  nodes: staticData.nodes,
+  edges: staticData.edges,
+  layouts: staticData.layouts,
+});
+
+// Watch for dynamic updates to `treeData`
+watch(() => props.treeData, (newTreeData) => {
+  if (newTreeData) {
+    data.nodes = newTreeData.nodes;
+    data.edges = newTreeData.edges;
+    layout("TB"); // Re-layout the graph
+  }
+}, { deep: true });
 function layout(direction: "TB" | "LR") {
   if (Object.keys(data.nodes).length <= 1 || Object.keys(data.edges).length == 0) {
     return;
