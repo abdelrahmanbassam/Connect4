@@ -242,9 +242,10 @@ export default {
 
 .hover-disc {
   position: absolute;
-  top: 0;
-  width: 60px;
-  height: 60px;
+  top: 0px;
+  bottom: 0px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   transition: left 0.1s ease;
 }
@@ -278,7 +279,7 @@ export default {
 }
 
 .player-disc {
-  background: #2196F3;
+  background: #eded3b;
 }
 
 .ai-disc {

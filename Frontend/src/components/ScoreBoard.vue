@@ -63,7 +63,7 @@ export default {
 }
 
 .score-value.player {
-  color: #2196F3;
+  color: #eded3b;
 }
 
 .score-value.ai {
