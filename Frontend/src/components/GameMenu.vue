@@ -4,21 +4,22 @@ export default {
   data() {
     return {
       selectedAlgorithm: 1,
-      aiAgent: 2,
-      searchDepth: 0
+      aiTurn: 2,
+      searchDepth: 1
     }
   },
   methods: {
     startGame() {
       this.$emit('gameStart', {
         algorithm: this.selectedAlgorithm,
-        aiAgent: this.aiAgent,
+        playerTurn: 3 - this.aiTurn,
+        aiTurn: this.aiTurn,
         depth: this.searchDepth
       })
     },
     updateDepth(event) {
       const value = parseInt(event.target.value)
-      if (value >= 0 && value <= 42) {
+      if (value >= 1 && value <= 42) {
         this.searchDepth = value
       }
     }
@@ -63,11 +64,11 @@ export default {
             type="number" 
             :value="searchDepth"
             @input="updateDepth"
-            min="0"
+            min="1"
             max="42"
             class="depth-input"
           />
-          <span class="depth-hint">Choose between 0-42</span>
+          <span class="depth-hint">Choose between 1-42</span>
         </div>
       </div>
 
@@ -75,14 +76,14 @@ export default {
         <h3 class="section-title">Who starts?</h3>
         <div class="button-group">
           <button 
-            :class="['start-btn', aiAgent === 2 ? 'active' : '']"
-            @click="aiAgent = 2"
+            :class="['start-btn', aiTurn === 2 ? 'active' : '']"
+            @click="aiTurn = 2"
           >
             Player Starts
           </button>
           <button 
-            :class="['start-btn', aiAgent === 1 ? 'active' : '']"
-            @click="aiAgent = 1"
+            :class="['start-btn', aiTurn === 1 ? 'active' : '']"
+            @click="aiTurn = 1"
           >
             AI Starts
           </button>

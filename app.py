@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from MiniMax.MiniMax import MiniMax
 from Heuristic.heuristics_factory import HeuristicsFactory
 from MiniMax.algorithms_factory import AlgorithmsFactory
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 @app.route('/api/game/move', methods=['POST'])
 def make_move():
@@ -14,7 +16,7 @@ def make_move():
         algorithm = data.get("algorithm", 1)
         turn = data.get("aiTurn", 1)
         max_depth = data.get("depth", 3)
-
+        
         # Set up MiniMax
         heuristic = HeuristicsFactory().get_heuristic("NormalScore")
         algorithm = AlgorithmsFactory().get_algorithm(algorithm, heuristic, board, turn, max_depth)
@@ -25,7 +27,7 @@ def make_move():
         player2_score = heuristic.count_fours(board, 2)
 
         return jsonify({
-            "col": best_move,
+            "board": board,
             "player1_score": player1_score,
             "player2_score": player2_score,
             "nodes_expanded": nodes_expanded,

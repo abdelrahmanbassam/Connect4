@@ -40,8 +40,8 @@
               <div 
                 class="disc" 
                 :class="{
-                  'player-disc': cell === 1,
-                  'ai-disc': cell === 2
+                  'player-disc': cell === playerTurn,
+                  'ai-disc': cell === aiTurn
                 }"
               ></div>
             </div>
@@ -75,6 +75,7 @@ export default {
   setup(props) {
     const showMenu = inject('showMenu')
     const board = ref(Array(6).fill().map(() => Array(7).fill(0)))
+    const playerTurn = ref(props.settings.playerTurn);
     const currentPlayer = ref(1) // 1 for player, 2 for AI
     const playerScore = ref(0)
     const aiScore = ref(0)
@@ -86,6 +87,7 @@ export default {
     // Initialize game with settings
     onMounted(() => {
       console.log('GameBoard mounted')
+      console.log(JSON.stringify(props.settings, null, 2))
       // console.log(JSON.stringify(board.value, null, 2))
       // console.log(JSON.stringify(props.settings.value, null, 2))
 
@@ -99,6 +101,7 @@ export default {
       showMenu.value = true
     }
 
+    //this method needs some work and edits
     const makeMove = async (col) => {
       if (!isValidMove(col) || isProcessing.value || currentPlayer.value !== 1) return
       
@@ -106,24 +109,10 @@ export default {
       if (row === -1) return
 
       isProcessing.value = true
-      board.value[row][col] = 1 // Player move
+      board.value[row][col] = playerTurn.value
       
       updateValues();
 
-      // Send move to backend and wait for AI response
-      // console.log(JSON.stringify(props.settings, null, 2))
-      // console.log(JSON.stringify(props.settings, null, 2))
-
-      // const response = await gameService.sendGameInfoToBackend(board.value, currentPlayer.value)
-      // if (response) {
-      //   board.value = response.board
-      //   playerScore.value = response.playerScore
-      //   aiScore.value = response.aiScore
-      //   expandedNodes.value = response.expandedNodes
-
-      //   // Update tree visualization here when implemented
-      // }
-      
       isProcessing.value = false
       gameStatus.value = 'Your Turn'
     }
@@ -160,6 +149,8 @@ export default {
 
     return {
       board,
+      aiTurn: props.settings.aiTurn,
+      playerTurn,
       currentPlayer,
       playerScore,
       aiScore,
