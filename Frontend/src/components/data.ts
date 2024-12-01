@@ -4,10 +4,10 @@ import { reactive } from "vue"
 const nodes: Nodes = {
   node1: { name: "N1" , icon: "&#xe5c7"},
   node2: { name: "N2" , icon: "&#xe5c5"},
-  node3: { name: "N3" , icon: "&#xef4a"},
+  node3: { name: "N3" , icon: "&#xe5c5"},
   node4: { name: "N4" , icon: "&#xe5c7"},
   node5: { name: "N5" , icon: "&#xe5c5"},
-  node6: { name: "N6" , icon: "&#xef4a"},
+  node6: { name: "N6" , icon: "&#xe5c5"},
   node7: { name: "N7" , icon: "&#xe5c7"},
 }
 

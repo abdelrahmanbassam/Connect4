@@ -29,7 +29,7 @@
       <!-- Use v-html to interpret escape sequences for icon characters. -->
       <text
         font-family="Material Icons"
-        :font-size="22 * scale"
+        :font-size="40 * scale"
         fill="#ffffff"
         text-anchor="middle"
         dominant-baseline="central"

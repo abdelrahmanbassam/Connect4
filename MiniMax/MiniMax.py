@@ -57,7 +57,7 @@ class MiniMax:
             nodes[current_node_id] = {
                 "name": str(node.value),  # Convert the value to string for the name
                 "type": node.type,        # Add type (min/max)
-                "icon": "&#xe5c7" if node.type == "MAX" else "&#xe5c5" if node.type == "MIN" else "&#xef4a"
+                "icon": "&#xe5c7" if node.type == "MAX" else "&#xe5c5" if node.type == "MIN" else ""
             }
 
             # If there's a parent, add an edge from the parent to the current node
