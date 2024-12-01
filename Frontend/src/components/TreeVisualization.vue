@@ -113,24 +113,25 @@ function updateLayout(direction: "TB" | "LR") {
 
 .title {
   margin-bottom: 1rem;
+  margin-top: 0;
   text-align: center;
 }
 
 .visualization-area {
-  height: calc(90% - 2rem);
+  height: calc(90% - 1rem);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 0.5rem;
   padding: 0.5rem;
 }
 
 .demo-control-panel {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   text-align: center;
 }
 /* style el-button */
 el-button {
-  margin: 0.5rem;
-  padding: 0.2rem;
+  margin: 0.5em;
+  padding: 0.3rem;
   border: 1px solid #fff;
   border-radius: 0.25rem;
   cursor: pointer;
