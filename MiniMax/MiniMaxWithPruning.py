@@ -7,6 +7,7 @@ class MiniMaxWithPruning(MiniMax):
         super().__init__(heuristic, board, player, max_depth)
 
     def maximize(self, board, depth, root, alpha=float('-inf'), beta=float('inf')):
+        # print("depth", depth)
         if depth == 0 or self.is_terminal(board):
             score = self.heuristic.heuristic(board) * self.sign
             root.value = score
@@ -18,6 +19,8 @@ class MiniMaxWithPruning(MiniMax):
             new_board = self.make_move(board, move, self.player)
             child = Node(float('inf'), "MIN")
             root.add_successor(child)
+            self.nodes_expanded += 1
+
             score, _ = self.minimize(new_board, depth - 1, child, alpha, beta)
             alpha = max(alpha, score)
             if score > max_score:
