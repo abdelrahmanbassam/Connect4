@@ -24,9 +24,9 @@ if __name__ == "__main__":
     board = [[0 for _ in range(7)] for _ in range(6)]  # 6x7 Connect Four board
     player = 1  # Human player
     ai_player = 2  # AI player
-    max_depth = 6
+    max_depth = 1
 
-    algorithm = algorithms_factory.get_algorithm(1, heuristic, board, ai_player, max_depth)
+    algorithm = algorithms_factory.get_algorithm(3, heuristic, board, ai_player, max_depth)
 
     print("Welcome to Connect Four! You are Player 1.")
     print_board(board)
@@ -65,6 +65,7 @@ if __name__ == "__main__":
 
         print("AI's move:")
         print_board(board)
+        print("Nodes expanded: " + str(algorithm.nodes_expanded))
 
         if is_full(board):
             print("The board is full! Game over.")
