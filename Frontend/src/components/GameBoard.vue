@@ -86,14 +86,12 @@ export default {
    
     // Initialize game with settings
     onMounted(() => {
-      console.log('GameBoard mounted')
-      console.log(JSON.stringify(props.settings, null, 2))
-      // console.log(JSON.stringify(board.value, null, 2))
-      // console.log(JSON.stringify(props.settings.value, null, 2))
-
-      // gameService.sendGameInfoToBackend(board.value, props.settings)
-      // const response =  gameService.sendGameInfoToBackend(board.value, props.settings)
-      updateValues()
+      // console.log('GameBoard mounted')
+      // console.log(JSON.stringify(props.settings, null, 2))
+      // console.log(playerTurn.value)
+      if(playerTurn.value === 2) {
+        updateValues()
+      }
     })
     
 
