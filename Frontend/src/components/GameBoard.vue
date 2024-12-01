@@ -178,7 +178,7 @@ export default {
 <style scoped>
 .game-container {
   padding: 2rem;
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
 }
 
@@ -190,7 +190,7 @@ export default {
 
 .game-layout {
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: 1fr 2fr 2fr;
   gap: 2rem;
   align-items: start;
 }

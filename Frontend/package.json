@@ -9,9 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@dagrejs/dagre": "^1.1.4",
     "axios": "^1.7.8",
+    "dagre": "^0.8.5",
+    "graphlib": "^2.1.8",
     "gsap": "^3.12.5",
     "konva": "^9.3.6",
+    "v-network-graph": "^0.9.18",
     "vite-vue-starter": "file:",
     "vue": "^3.4.38",
     "vue-konva": "^3.0.2"
