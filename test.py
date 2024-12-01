@@ -50,23 +50,7 @@ if __name__ == "__main__":
 
         print("Your move:")
         print_board(board)
-
-        if is_full(board):
-            print("The board is full! Game over.")
-            break
-
-        # AI's turn
-        print("AI is making its move...")
-        best_move = algorithm.minimax(board, max_depth)
-        for r in range(len(board) - 1, -1, -1):
-            if board[r][best_move] == 0:
-                board[r][best_move] = ai_player
-                break
-
-        print("AI's move:")
-        print_board(board)
-        print("Nodes expanded: " + str(algorithm.nodes_expanded))
-
+        print(heuristic.count_consecutive(board, player))
         if is_full(board):
             print("The board is full! Game over.")
             break

@@ -6,7 +6,8 @@ class MiniMax:
         self.board = board
         self.player = player
         self.max_depth = max_depth
-        self.sign = 1 if player == 1 else -1
+        # self.sign = 1 if player == 1 else -1
+        self.sign = 1
         self.best_move = None
         self.root = None
         self.nodes_expanded = 0
@@ -28,7 +29,9 @@ class MiniMax:
         return board[0].count(0) == 0
     
     def get_possible_moves(self, board):
-        return [c for c in range(len(board[0])) if board[0][c] == 0]
+        moves = [c for c in range(len(board[0])) if board[0][c] == 0]
+        sorted_moves = sorted(moves, key=lambda x: abs(len(board) // 2 - x))
+        return sorted_moves
 
     def make_move(self, board, move, player):
         new_board = [row[:] for row in board]

@@ -7,7 +7,7 @@ class MiniMaxWoPruning(MiniMax):
 
     def maximize(self, board, depth, root):
         if depth == 0 or self.is_terminal(board):
-            score = self.heuristic.heuristic(board) * self.sign
+            score = self.heuristic.heuristic(board, self.player) * self.sign
             root.value = score
             return score, None
 
@@ -27,7 +27,7 @@ class MiniMaxWoPruning(MiniMax):
 
     def minimize(self, board, depth, root):
         if depth == 0 or self.is_terminal(board):
-            score = self.heuristic.heuristic(board) * self.sign
+            score = self.heuristic.heuristic(board, self.player) * self.sign
             root.value = score
             return score, None
 

@@ -9,7 +9,7 @@ class MiniMaxWithPruning(MiniMax):
     def maximize(self, board, depth, root, alpha=float('-inf'), beta=float('inf')):
         # print("depth", depth)
         if depth == 0 or self.is_terminal(board):
-            score = self.heuristic.heuristic(board) * self.sign
+            score = self.heuristic.heuristic(board, self.player) * self.sign
             root.value = score
             return score, None
 
@@ -33,7 +33,7 @@ class MiniMaxWithPruning(MiniMax):
 
     def minimize(self, board, depth, root, alpha=float('-inf'), beta=float('inf')):
         if depth == 0 or self.is_terminal(board):
-            score = self.heuristic.heuristic(board) * self.sign
+            score = self.heuristic.heuristic(board, self.player) * self.sign
             root.value = score
             return score, None
 

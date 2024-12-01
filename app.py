@@ -7,6 +7,9 @@ from MiniMax.algorithms_factory import AlgorithmsFactory
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
+score_calculator = HeuristicsFactory().get_heuristic("NormalScore")
+heuristic = HeuristicsFactory().get_heuristic("ConsecutiveCounts")
+
 @app.route('/api/game/move', methods=['POST'])
 def make_move():
     try:
@@ -18,15 +21,14 @@ def make_move():
         max_depth = data.get("depth", 3)
         
         # Set up MiniMax
-        heuristic = HeuristicsFactory().get_heuristic("NormalScore")
+        heuristic = HeuristicsFactory().get_heuristic("ConsecutiveCounts")
         algorithm = AlgorithmsFactory().get_algorithm(algorithm, heuristic, board, turn, max_depth)
         best_move = algorithm.minimax(board, max_depth)
         nodes_expanded = algorithm.nodes_expanded
         board = algorithm.make_move(board, best_move, turn)
-        player1_score = heuristic.count_fours(board, 1)
-        player2_score = heuristic.count_fours(board, 2)
+        player1_score = score_calculator.count_fours(board, 1)
+        player2_score = score_calculator.count_fours(board, 2)
         tree = algorithm.tree_to_graph(algorithm.root)
-
         return jsonify({
             "board": board,
             "player1_score": player1_score,

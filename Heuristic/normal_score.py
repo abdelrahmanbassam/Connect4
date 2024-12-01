@@ -2,8 +2,8 @@ from Heuristic.heuristic import Heuristic
 
 class NormalScore(Heuristic):
     # Normal score heuristic
-    def heuristic(self, board):
-        return self.count_fours(board, 1) - self.count_fours(board, 2)
+    def heuristic(self, board, player):
+        return self.count_fours(board, player) - self.count_fours(board, 3 - player)
 
     def count_fours(self, board, player):
         rows, cols = len(board), len(board[0])
