@@ -18,7 +18,7 @@
 
       <div class="board-container">
         <div 
-          v-if="currentPlayer === 1 && hoveredColumn !== -1 && !isProcessing" 
+          v-if="currentPlayer === playerTurn && hoveredColumn !== -1 && !isProcessing" 
           class="hover-disc player-disc"
           :style="{ left: `${hoveredColumn * 80 + 22  }px` }"
         ></div>
@@ -90,7 +90,7 @@ export default {
       // console.log(JSON.stringify(props.settings, null, 2))
       // console.log(playerTurn.value)
       if(playerTurn.value === 2) {
-        updateValues()
+        aiAgentStart()
       }
     })
     
@@ -101,20 +101,34 @@ export default {
 
     //this method needs some work and edits
     const makeMove = async (col) => {
-      if (!isValidMove(col) || isProcessing.value || currentPlayer.value !== 1) return
+      if (!isValidMove(col) || isProcessing.value || currentPlayer.value !== playerTurn.value) return
       
       const row = getLowestEmptyRow(col)
       if (row === -1) return
 
-      isProcessing.value = true
-      board.value[row][col] = playerTurn.value
-      
-      updateValues();
 
+      board.value[row][col] = playerTurn.value
+
+      console.log("after player move")
+      isProcessing.value = true
+      gameStatus.value = 'AI is thinking...'
+      
+      await updateValues();
       isProcessing.value = false
       gameStatus.value = 'Your Turn'
     }
+    const aiAgentStart = async () => {
+      isProcessing.value = true
+      gameStatus.value = 'AI is thinking...'
+      currentPlayer.value = 1
 
+      await updateValues();
+
+      isProcessing.value = false
+      gameStatus.value = 'Your Turn'
+      currentPlayer.value = 2
+      // console.log(currentPlayer.value, playerTurn.value, isProcessing.value)
+    }
     const updateValues = async () => {
       const response = await gameService.sendGameInfoToBackend(board.value,props.settings)
       if (response) {
@@ -123,7 +137,7 @@ export default {
         aiScore.value = response.aiScore
         expandedNodes.value = response.expandedNodes
         treeData.value = response.gameTree
-        console.log(treeData.value)
+        // console.log(treeData.value)
       }
     }
     const isValidMove = (col) => {
@@ -138,9 +152,11 @@ export default {
     }
 
     const handleMouseMove = (colIndex) => {
-      if (!isProcessing.value && currentPlayer.value === 1) {
+      // console.log(isProcessing.value)
+      if (!isProcessing.value && currentPlayer.value === playerTurn.value) {
         hoveredColumn.value = colIndex
       }
+      // console.log( hoveredColumn.value)
     }
 
     const handleMouseLeave = () => {
