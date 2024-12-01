@@ -1,72 +1,31 @@
 export const gameService = {
-  async initializeGame(settings) {
+    async sendGameInfoToBackend(board, settings) {
     try {
-      // Commented for now until backend is ready
-      /* const response = await fetch('/api/game/initialize', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          algorithm: settings.algorithm,
-          firstPlayer: settings.firstPlayer
-        })
-      });
-      
-      const data = await response.json();
-      return {
-        board: data.board,
-        currentPlayer: data.currentPlayer,
-        playerScore: data.playerScore,
-        aiScore: data.aiScore,
-        gameTree: data.gameTree
-      }; */
-
-      // Temporary mock response
-      return {
-        board: Array(6).fill().map(() => Array(7).fill(0)),
-        currentPlayer: settings.firstPlayer === 'player' ? 1 : 2,
-        playerScore: 0,
-        aiScore: 0,
-        gameTree: null
+      // console.log('Sending move to backend...');
+      let body = {
+        board: board,
+        algorithm: settings.algorithm,
+        aiTurn: settings.aiTurn,
+        depth: settings.depth
       };
-    } catch (error) {
-      console.error('Error initializing game:', error);
-      return null;
-    }
-  },
-  async sendBoardToBackend(board) {
-    try {
-      // Commented for now until backend is ready
-      /* const response = await fetch('/api/game/move', {
+      // console.log(JSON.stringify(body, null, 2));
+  
+      const response = await fetch('http://localhost:5000/api/game/move', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          board,
-          currentPlayer
-        })
+        body: JSON.stringify(body)
       });
-      
+      // console.log('Move sent to backend');
+
       const data = await response.json();
       return {
         board: data.board,
-        playerScore: data.playerScore,
-        aiScore: data.aiScore,
-        expandedNodes: data.expandedNodes,
-        gameTree: data.gameTree
-      }; */
-
-      // Temporary mock response
-      
-      return {
-        board: this.mockAIMove(board),
-        // board: Array(6).fill().map(() => Array(7).fill().map(() => Math.round(Math.random()))),
-        playerScore: 12,
-        aiScore: 7,
-        expandedNodes: 5,
-        gameTree: null
+        playerScore: (settings.aiTurn === 2) ? data.player1_score : data.player2_score,
+        aiScore: (settings.aiTurn === 1) ? data.player1_score : data.player2_score,
+        expandedNodes: data.nodes_expanded,
+        gameTree: data.tree
       };
     } catch (error) {
       console.error('Error sending move to backend:', error);

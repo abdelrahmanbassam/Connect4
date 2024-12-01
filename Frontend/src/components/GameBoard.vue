@@ -20,7 +20,7 @@
         <div 
           v-if="currentPlayer === 1 && hoveredColumn !== -1 && !isProcessing" 
           class="hover-disc player-disc"
-          :style="{ left: `${hoveredColumn * 70 + 5}px` }"
+          :style="{ left: `${hoveredColumn * 80 + 22  }px` }"
         ></div>
         
         <div class="board">
@@ -40,8 +40,8 @@
               <div 
                 class="disc" 
                 :class="{
-                  'player-disc': cell === 1,
-                  'ai-disc': cell === 2
+                  'player-disc': cell === playerTurn,
+                  'ai-disc': cell === aiTurn
                 }"
               ></div>
             </div>
@@ -75,6 +75,7 @@ export default {
   setup(props) {
     const showMenu = inject('showMenu')
     const board = ref(Array(6).fill().map(() => Array(7).fill(0)))
+    const playerTurn = ref(props.settings.playerTurn);
     const currentPlayer = ref(1) // 1 for player, 2 for AI
     const playerScore = ref(0)
     const aiScore = ref(0)
@@ -85,33 +86,20 @@ export default {
    
     // Initialize game with settings
     onMounted(() => {
-      console.log('GameBoard mounted')
-      initGame()
-    })
-    const initGame = async () => {
-      console.log("Initializing game with settings:", props.settings)
-      isProcessing.value = true
-      const response = await gameService.initializeGame(props.settings)
-      
-      if (response) {
-        board.value = response.board
-        currentPlayer.value = response.currentPlayer
-        playerScore.value = response.playerScore
-        aiScore.value = response.aiScore
-        gameStatus.value = currentPlayer.value === 1 ? 'Your Turn' : 'AI Turn'
-        
-        if (currentPlayer.value === 2) {
-          // If AI starts, make the first move
-          await makeAIMove()
-        }
+      // console.log('GameBoard mounted')
+      // console.log(JSON.stringify(props.settings, null, 2))
+      // console.log(playerTurn.value)
+      if(playerTurn.value === 2) {
+        updateValues()
       }
-      
-      isProcessing.value = false
-    }
+    })
+    
+
     const newGame = () => {
       showMenu.value = true
     }
 
+    //this method needs some work and edits
     const makeMove = async (col) => {
       if (!isValidMove(col) || isProcessing.value || currentPlayer.value !== 1) return
       
@@ -119,23 +107,23 @@ export default {
       if (row === -1) return
 
       isProcessing.value = true
-      board.value[row][col] = 1 // Player move
+      board.value[row][col] = playerTurn.value
       
-      // Send move to backend and wait for AI response
-      const response = await gameService.sendBoardToBackend(board.value, currentPlayer.value)
-      
+      updateValues();
+
+      isProcessing.value = false
+      gameStatus.value = 'Your Turn'
+    }
+
+    const updateValues = async () => {
+      const response = await gameService.sendGameInfoToBackend(board.value,props.settings)
       if (response) {
         board.value = response.board
         playerScore.value = response.playerScore
         aiScore.value = response.aiScore
         expandedNodes.value = response.expandedNodes
-        // Update tree visualization here when implemented
       }
-      
-      isProcessing.value = false
-      gameStatus.value = 'Your Turn'
     }
-    
     const isValidMove = (col) => {
       return col >= 0 && col < 7 && board.value[0][col] === 0
     }
@@ -159,6 +147,8 @@ export default {
 
     return {
       board,
+      aiTurn: props.settings.aiTurn,
+      playerTurn,
       currentPlayer,
       playerScore,
       aiScore,
