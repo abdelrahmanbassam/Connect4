@@ -77,6 +77,9 @@ class ExpectiMiniMax(MiniMax):
         return score
 
     def maximize(self, board, depth, root):
+        if self.hash_board(board) in self.cache:
+            root.value, best = self.cache[self.hash_board(board)]
+            return root.value, best
         if depth == 0 or self.is_terminal(board):
             score = self.heuristic.heuristic(board, self.player) * self.sign
             root.value = score
@@ -85,9 +88,6 @@ class ExpectiMiniMax(MiniMax):
 
         best_move = None
         max_score = float('-inf')
-        if self.hash_board(board) in self.cache:
-            root.value, best = self.cache[self.hash_board(board)]
-            return root.value, best
         # print(self.cache)
         for move in self.get_possible_moves(board):
             self.nodes_expanded += 1
@@ -100,6 +100,9 @@ class ExpectiMiniMax(MiniMax):
         return max_score, best_move
 
     def minimize(self, board, depth, root):
+        if self.hash_board(board) in self.cache:
+            root.value, best = self.cache[self.hash_board(board)]
+            return root.value, best
         if depth == 0 or self.is_terminal(board):
             score = self.heuristic.heuristic(board, self.player) * self.sign
             root.value = score
@@ -108,9 +111,6 @@ class ExpectiMiniMax(MiniMax):
         # print(self.cache)
         best_move = None
         min_score = float('inf')
-        if self.hash_board(board) in self.cache:
-            root.value, best = self.cache[self.hash_board(board)]
-            return root.value, best
         for move in self.get_possible_moves(board):
             self.nodes_expanded += 1
             score = self.chance(board, move, True, root, depth - 1)

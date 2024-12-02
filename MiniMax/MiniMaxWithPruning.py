@@ -7,7 +7,9 @@ class MiniMaxWithPruning(MiniMax):
         super().__init__(heuristic, board, player, max_depth)
 
     def maximize(self, board, depth, root, alpha=float('-inf'), beta=float('inf')):
-        # print("depth", depth)
+        if self.hash_board(board) in self.cache:
+            root.value, best = self.cache[self.hash_board(board)]
+            return root.value, best
         if depth == 0 or self.is_terminal(board):
             score = self.heuristic.heuristic(board, self.player) * self.sign
             root.value = score
@@ -15,9 +17,6 @@ class MiniMaxWithPruning(MiniMax):
             return score, None
         best_move = None
         max_score = float('-inf')
-        if self.hash_board(board) in self.cache:
-            root.value, best = self.cache[self.hash_board(board)]
-            return root.value, best
         for move in self.get_possible_moves(board):
             new_board = self.make_move(board, move, self.player)
             child = Node(float('inf'), "MIN")
@@ -36,6 +35,9 @@ class MiniMaxWithPruning(MiniMax):
         return max_score, best_move
 
     def minimize(self, board, depth, root, alpha=float('-inf'), beta=float('inf')):
+        if self.hash_board(board) in self.cache:
+            root.value, best = self.cache[self.hash_board(board)]
+            return root.value, best
         if depth == 0 or self.is_terminal(board):
             score = self.heuristic.heuristic(board, self.player) * self.sign
             root.value = score
@@ -44,9 +46,6 @@ class MiniMaxWithPruning(MiniMax):
 
         best_move = None
         min_score = float('inf')
-        if self.hash_board(board) in self.cache:
-            root.value, best = self.cache[self.hash_board(board)]
-            return root.value, best
         for move in self.get_possible_moves(board):
             new_board = self.make_move(board, move, self.opponent(self.player))
             child = Node(float('-inf'), "MAX")
