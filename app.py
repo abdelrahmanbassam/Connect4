@@ -29,6 +29,7 @@ def make_move():
         player1_score = score_calculator.count_fours(board, 1)
         player2_score = score_calculator.count_fours(board, 2)
         tree = algorithm.tree_to_graph(algorithm.root)
+        print("done processing")
         return jsonify({
             "board": board,
             "player1_score": player1_score,

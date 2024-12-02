@@ -12,7 +12,10 @@
         
         <div class="status-container">
           <h2 class="status">{{ gameStatus }}</h2>
-          <button class="new-game-btn" @click="newGame">New Game</button>
+          <div class="button-container">
+            <button class="game-btn" @click="newGame">New Game</button>
+            <button class="game-btn show-tree-btn" @click="showTreeModal = true">Show Tree</button>
+          </div>
         </div>
       </div>
 
@@ -20,7 +23,7 @@
         <div 
           v-if="currentPlayer === playerTurn && hoveredColumn !== -1 && !isProcessing" 
           class="hover-disc player-disc"
-          :style="{ left: `${hoveredColumn * 80 + 22  }px` }"
+          :style="{ left: `${hoveredColumn * 80 + 22}px` }"
         ></div>
         
         <div class="board">
@@ -48,9 +51,19 @@
           </div>
         </div>
       </div>
-
-      <TreeVisualization class="tree-viz" :treeData="treeData" />
     </div>
+
+    <!-- <TreeModal 
+      :show="showTreeModal"
+      :treeData="treeData"
+      @close="showTreeModal = false"
+    /> -->
+    <TreeModal 
+      v-if="showTreeModal"
+      :v-show="showTreeModal"
+      :treeData="treeData"
+      @close="showTreeModal = false"
+    />
   </div>
 </template>
 
@@ -58,13 +71,16 @@
 import { ref, onMounted, inject } from 'vue'
 import ScoreBoard from './ScoreBoard.vue'
 import TreeVisualization from './TreeVisualization.vue'
+//treex
+import TreeModal from './TreeModal.vue'
 import { gameService } from '../services/gameService'
 
 export default {
   name: 'GameBoard',
   components: {
     ScoreBoard,
-    TreeVisualization
+    // TreeVisualization
+    TreeModal
   },
   props: {
     settings: {
@@ -85,6 +101,9 @@ export default {
     const hoveredColumn = ref(-1)
     const isProcessing = ref(false)
     const treeData = ref(null); // Ref to hold dynamic game tree data
+    // treex
+    const showTreeModal = ref(false)
+
     // Initialize game with settings
     onMounted(() => {
       // console.log('GameBoard mounted')
@@ -127,6 +146,7 @@ export default {
     }
     const updateValues = async () => {
       const response = await gameService.sendGameInfoToBackend(board.value,props.settings)
+      console.log("response arrived")
       if (response) {
         board.value = response.board
         playerScore.value = response.playerScore
@@ -174,7 +194,8 @@ export default {
       handleMouseMove,
       handleMouseLeave,
       isProcessing,
-      treeData
+      treeData,
+      showTreeModal
     }
   }
 }
@@ -217,7 +238,22 @@ export default {
   margin-bottom: 1rem;
 }
 
-.new-game-btn {
+/* .new-game-btn {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+} */
+.button-container {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.game-btn {
   background: #4CAF50;
   color: white;
   border: none;
@@ -227,6 +263,9 @@ export default {
   transition: background-color 0.3s ease;
 }
 
+.show-tree-btn {
+  background: #2196F3;
+}
 .new-game-btn:hover {
   background: #45a049;
 }
