@@ -37,6 +37,9 @@
         v-html="data.nodes[nodeId].icon"
       />
     </template>
+    <template #edge-label="{ edge, ...slotProps }">
+      <v-edge-label :text="edge.label" align="center" vertical-align="above" v-bind="slotProps" />
+    </template>
     </v-network-graph>
     </div>
   </div>
@@ -61,13 +64,14 @@ const configs = vNG.defineConfigs({
   },
   node: {
     normal: { radius: nodeSize / 2 },
-    label: { direction: "north", color: "#fff", lineHeight: 1.5 },
+    label: { direction: "north", color: "#fff", lineHeight: 1.5 , fontSize: 11},
   },
   edge: {
     normal: {
       color: "#aaa",
       width: 3,
     },
+    label: { color: "#aaa", fontSize: 12},
     margin: 2,
     marker: {
       target: {
