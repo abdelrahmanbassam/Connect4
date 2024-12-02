@@ -14,7 +14,7 @@
           <h2 class="status">{{ gameStatus }}</h2>
           <div class="button-container">
             <button class="game-btn" @click="newGame">New Game</button>
-            <button class="game-btn show-tree-btn" @click="showTreeModal = true">Show Tree</button>
+            <button class="game-btn show-tree-btn" @click="updateTree">Show Tree</button>
           </div>
         </div>
       </div>
@@ -53,17 +53,12 @@
       </div>
     </div>
 
-    <!-- <TreeModal 
-      :show="showTreeModal"
-      :treeData="treeData"
-      @close="showTreeModal = false"
-    /> -->
     <TreeModal 
-      v-if="showTreeModal"
-      :v-show="showTreeModal"
-      :treeData="treeData"
+      :show="showTreeModal"
+      :treeData="treeFromBack"
       @close="showTreeModal = false"
     />
+    
   </div>
 </template>
 
@@ -100,7 +95,8 @@ export default {
     const gameStatus = ref('Your Turn')
     const hoveredColumn = ref(-1)
     const isProcessing = ref(false)
-    const treeData = ref(null); // Ref to hold dynamic game tree data
+    const currentTree = ref(null)
+    const treeFromBack = ref(null); // Ref to hold dynamic game tree data
     // treex
     const showTreeModal = ref(false)
 
@@ -132,6 +128,7 @@ export default {
       // console.log("after player move")
       aiAgentTurn()
     }
+    
     const aiAgentTurn = async () => {
       isProcessing.value = true
       gameStatus.value = 'AI is thinking...'
@@ -152,9 +149,14 @@ export default {
         playerScore.value = response.playerScore
         aiScore.value = response.aiScore
         expandedNodes.value = response.expandedNodes
-        treeData.value = response.gameTree
-        // console.log(treeData.value)
+        currentTree.value = response.gameTree
+        // console.log(treeFromBack.value)
       }
+    }
+    const updateTree = () => {
+      showTreeModal.value = true;
+      treeFromBack.value = currentTree.value;
+      // Additional logic to update the tree can be added here
     }
     const isValidMove = (col) => {
       return col >= 0 && col < 7 && board.value[0][col] === 0
@@ -181,6 +183,7 @@ export default {
 
     return {
       board,
+      currentTree,
       aiTurn,
       playerTurn,
       currentPlayer,
@@ -194,8 +197,9 @@ export default {
       handleMouseMove,
       handleMouseLeave,
       isProcessing,
-      treeData,
-      showTreeModal
+      treeFromBack,
+      showTreeModal,
+      updateTree 
     }
   }
 }
