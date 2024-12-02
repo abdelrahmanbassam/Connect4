@@ -114,7 +114,7 @@ function layout(direction: "TB" | "LR") {
     ranksep: nodeSize * 2,
   });
   // Default to assigning a new object as a label for each new edge.
-  g.setDefaultEdgeLabel(() => ({}));
+  // g.setDefaultEdgeLabel(() => ({}));
 
   // Add nodes to the graph. The first argument is the node id. The second is
   // metadata about the node. In this case we're going to add labels to each of
@@ -125,7 +125,7 @@ function layout(direction: "TB" | "LR") {
 
   // Add edges to the graph.
   Object.values(data.edges).forEach((edge) => {
-    g.setEdge(edge.source, edge.target);
+    g.setEdge(edge.source, edge.target, {label: edge.label});
   });
 
   dagre.layout(g);

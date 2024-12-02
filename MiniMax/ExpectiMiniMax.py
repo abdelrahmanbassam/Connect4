@@ -9,17 +9,17 @@ class ExpectiMiniMax(MiniMax):
     
     def chance(self, board, selected_move, next_turn_maximizing:bool, root, depth):
         probs = {"left": 0.2, "right": 0.2, "current": 0.6}
-        chance_node = Node(0.0, "CHANCE")
+        chance_node = Node(0.0, "CHANCE", selected_move)
         root.add_successor(chance_node) # root is MIN OR MAX
 
         player = self.opponent(self.player) if next_turn_maximizing else self.player
-        def call_next_turn(new_board, depth, chance_node, next_turn_maximizing):
+        def call_next_turn(new_board, depth, chance_node, next_turn_maximizing, chance_to_move):
             if next_turn_maximizing:
-                child = Node(float('-inf'), "MAX")
+                child = Node(float('-inf'), "MAX", chance_to_move)
                 chance_node.add_successor(child)
                 score, _ = self.maximize(new_board, depth-1, child)
             else:
-                child = Node(float('inf'), "MIN")
+                child = Node(float('inf'), "MIN", chance_to_move)
                 chance_node.add_successor(child)
                 score, _ = self.minimize(new_board, depth-1, child)
             return score
@@ -28,7 +28,7 @@ class ExpectiMiniMax(MiniMax):
         # --> we make the move and call minimize if next turn is min
         new_board = self.make_move(board, selected_move, player)
         self.nodes_expanded += 1
-        score = call_next_turn(new_board, depth, chance_node, next_turn_maximizing)  
+        score = call_next_turn(new_board, depth, chance_node, next_turn_maximizing, selected_move)  
         score_current = score
 
         # if the left to selected move is possible to play
@@ -37,14 +37,14 @@ class ExpectiMiniMax(MiniMax):
         if selected_move - 1 >= 0 and board[0][selected_move - 1] == 0:
             new_board = self.make_move(board, selected_move-1, player)
             self.nodes_expanded += 1
-            score = call_next_turn(new_board, depth, chance_node, next_turn_maximizing) 
+            score = call_next_turn(new_board, depth, chance_node, next_turn_maximizing, selected_move - 1) 
             score_left = score
 
         score_right = None
         if selected_move + 1 < len(self.board[0]) and board[0][selected_move + 1] == 0:
             new_board = self.make_move(board, selected_move + 1, player)
             self.nodes_expanded += 1
-            score = call_next_turn(new_board, depth, chance_node, next_turn_maximizing) 
+            score = call_next_turn(new_board, depth, chance_node, next_turn_maximizing, selected_move + 1) 
             score_right = score
 
         # make sure the probabilitiess are normalized

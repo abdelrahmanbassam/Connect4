@@ -25,7 +25,7 @@ class MiniMax:
     def minimize(self, board, depth, root):
         pass
     def minimax(self, board, depth):
-        root = Node(float('-inf'), "MAX")
+        root = Node(float('-inf'), "MAX", 0)
         self.nodes_expanded += 1
         self.cache = {} # Clear cache
         score, move = self.maximize(board, depth, root)
@@ -58,7 +58,7 @@ class MiniMax:
         node_counter = 1
         edge_counter = 1
 
-        def traverse(node, parent_id=None):
+        def traverse(node:Node, parent_id=None):
             nonlocal node_counter, edge_counter
 
             # Create a unique node ID
@@ -75,7 +75,7 @@ class MiniMax:
             # If there's a parent, add an edge from the parent to the current node
             if parent_id is not None:
                 edge_id = f"edge{edge_counter}"
-                edges[edge_id] = {"source": parent_id, "target": current_node_id}
+                edges[edge_id] = {"source": parent_id, "target": current_node_id, "label": str(node.label_from_parent)}
                 edge_counter += 1
 
             # Traverse child nodes

@@ -19,7 +19,7 @@ class MiniMaxWithPruning(MiniMax):
         max_score = float('-inf')
         for move in self.get_possible_moves(board):
             new_board = self.make_move(board, move, self.player)
-            child = Node(float('inf'), "MIN")
+            child = Node(float('inf'), "MIN", move)
             root.add_successor(child)
             self.nodes_expanded += 1
 
@@ -48,7 +48,7 @@ class MiniMaxWithPruning(MiniMax):
         min_score = float('inf')
         for move in self.get_possible_moves(board):
             new_board = self.make_move(board, move, self.opponent(self.player))
-            child = Node(float('-inf'), "MAX")
+            child = Node(float('-inf'), "MAX", move)
             root.add_successor(child)
             score, _ = self.maximize(new_board, depth - 1, child, alpha, beta)
             beta = min(beta, score)
