@@ -20,9 +20,9 @@ class MiniMax:
         hash = hashlib.sha1(temp.tobytes()).hexdigest()
         return hash
     
-    def maximize(self, board, depth, root):
+    def maximize(self, board, depth, root, extra):
         pass
-    def minimize(self, board, depth, root):
+    def minimize(self, board, depth, root, extra):
         pass
     def minimax(self, board, depth):
         root = Node(float('-inf'), "MAX", 0)
