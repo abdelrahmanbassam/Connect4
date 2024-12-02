@@ -1,7 +1,8 @@
 class Node:
-    def __init__(self, value, type):
+    def __init__(self, value, type, label_from_parent = 0):
         self.value = value
         self.type = type
+        self.label_from_parent = label_from_parent
         self.successors = []
     
     def add_successor(self, successor):

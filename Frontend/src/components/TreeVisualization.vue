@@ -44,6 +44,41 @@
           </v-network-graph>
         </div>
       </div>
+      <v-network-graph
+        ref="graph"
+        class="graph"
+        :nodes="data.nodes"
+        :edges="data.edges"
+        :layouts="data.layouts"
+        :configs="configs"
+      >
+      <defs>
+      <!-- Cannot use <style> directly due to restrictions of Vue. -->
+      <component is="style">
+        @font-face { font-family: 'Material Icons'; font-style: normal; font-weight:
+        400; src:
+        url(https://fonts.gstatic.com/s/materialicons/v97/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2)
+        format('woff2'); }
+      </component>
+    </defs>
+        <!-- Replace the node component -->
+        <template #override-node="{ nodeId, scale, config, ...slotProps }">
+      <circle :r="config.radius * scale" :fill="config.color" v-bind="slotProps" />
+      <!-- Use v-html to interpret escape sequences for icon characters. -->
+      <text
+        font-family="Material Icons"
+        :font-size="40 * scale"
+        fill="#ffffff"
+        text-anchor="middle"
+        dominant-baseline="central"
+        style="pointer-events: none"
+        v-html="data.nodes[nodeId].icon"
+      />
+    </template>
+    <template #edge-label="{ edge, ...slotProps }">
+      <v-edge-label :text="edge.label" align="center" vertical-align="above" v-bind="slotProps" />
+    </template>
+    </v-network-graph>
     </div>
   </div>
 </template>
@@ -78,13 +113,14 @@ const configs = vNG.defineConfigs({
   },
   node: {
     normal: { radius: nodeSize / 2 },
-    label: { direction: "north", color: "#fff", lineHeight: 1.5 },
+    label: { direction: "north", color: "#fff", lineHeight: 1.5 , fontSize: 11},
   },
   edge: {
     normal: {
       color: "#aaa",
       width: 3,
     },
+    label: { color: "#aaa", fontSize: 12},
     margin: 2,
     marker: {
       target: {
@@ -122,14 +158,15 @@ function layout(direction) {
     edgesep: nodeSize,
     ranksep: nodeSize * 2,
   });
-  g.setDefaultEdgeLabel(() => ({}));
+  // Default to assigning a new object as a label for each new edge.
+  // g.setDefaultEdgeLabel(() => ({}));
 
   Object.entries(data.nodes).forEach(([nodeId, node]) => {
     g.setNode(nodeId, { label: node.name, width: nodeSize, height: nodeSize });
   });
 
   Object.values(data.edges).forEach((edge) => {
-    g.setEdge(edge.source, edge.target);
+    g.setEdge(edge.source, edge.target, {label: edge.label});
   });
 
   dagre.layout(g);

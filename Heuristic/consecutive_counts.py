@@ -12,7 +12,7 @@ class ConsecutiveCounts(Heuristic):
             [4, 6, 8, 10, 8, 6, 4],
             [3, 4, 5, 7, 5, 4, 3]
         ]
-    def heuristic(self, board, player):
+    def heuristic(self, board, player, col = None):
         counts = self.count_consecutive(board, player)
         location_points = self.location_points(board, player)
         score = location_points * self.weights[0] 
