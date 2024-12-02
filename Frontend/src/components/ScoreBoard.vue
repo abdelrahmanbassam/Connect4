@@ -40,6 +40,7 @@ export default {
 <style scoped>
 .score-container {
   display: flex;
+  width: 300px;
   flex-direction: column;
   gap: 1rem;
 }

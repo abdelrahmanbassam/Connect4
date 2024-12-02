@@ -1,6 +1,6 @@
 <template>
   <div class="game-container">
-    <h1 class="title">Connect Four</h1>
+    <!-- <h1 class="title">Connect Four</h1> -->
     
     <div class="game-layout">
       <div class="scores-container">
@@ -23,7 +23,7 @@
         <div 
           v-if="currentPlayer === playerTurn && hoveredColumn !== -1 && !isProcessing" 
           class="hover-disc player-disc"
-          :style="{ left: `${hoveredColumn * 80 + 22}px` }"
+          :style="{ left: `${hoveredColumn * 110 + 22}px` }"
         ></div>
         
         <div class="board">
@@ -208,7 +208,7 @@ export default {
 <style scoped>
 .game-container {
   padding: 2rem;
-  max-width: 1300px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -219,13 +219,15 @@ export default {
 }
 
 .game-layout {
+  
   display: grid;
   grid-template-columns: 1fr 2fr 2fr;
   gap: 2rem;
-  align-items: start;
+  align-items: center;
 }
 
 .scores-container {
+  
   background: white;
   border-radius: 1rem;
   padding: 1rem;
@@ -233,6 +235,7 @@ export default {
 }
 
 .status-container {
+  
   text-align: center;
   margin-top: 1rem;
 }
@@ -259,9 +262,10 @@ export default {
 
 .game-btn {
   background: #4CAF50;
-  color: white;
+  font-size: 20px;
+  color: rgb(240, 240, 240);
   border: none;
-  padding: 0.5rem 1rem;
+  padding: 1rem 0.9rem;
   border-radius: 0.5rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -276,15 +280,15 @@ export default {
 
 .board-container {
   position: relative;
-  padding-top: 70px;
+  padding-top: 100px;
 }
 
 .hover-disc {
   position: absolute;
   top: 0px;
-  bottom: 0px;
-  width: 70px;
-  height: 70px;
+  /* bottom: 10px; */
+  width: 95px;
+  height: 95px;
   border-radius: 50%;
   transition: left 0.1s ease;
 }
@@ -303,8 +307,8 @@ export default {
 }
 
 .cell {
-  width: 70px;
-  height: 70px;
+  width: 100px;
+  height: 100px;
   padding: 5px;
   cursor: pointer;
 }
