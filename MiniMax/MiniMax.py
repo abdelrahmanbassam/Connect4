@@ -27,6 +27,7 @@ class MiniMax:
     def minimax(self, board, depth):
         root = Node(float('-inf'), "MAX")
         self.nodes_expanded += 1
+        self.cache = {} # Clear cache
         score, move = self.maximize(board, depth, root)
         self.best_move = move
         self.root = root
