@@ -31,7 +31,7 @@ class MiniMax:
         score, move = self.maximize(board, depth, root)
         self.best_move = move
         self.root = root
-        print(root.visualize())
+        # print(root.visualize())
         return move
 
     def is_terminal(self, board):

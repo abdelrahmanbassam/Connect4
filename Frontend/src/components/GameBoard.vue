@@ -12,7 +12,10 @@
         
         <div class="status-container">
           <h2 class="status">{{ gameStatus }}</h2>
-          <button class="new-game-btn" @click="newGame">New Game</button>
+          <div class="button-container">
+            <button class="game-btn" @click="newGame">New Game</button>
+            <button class="game-btn show-tree-btn" @click="showTreeModal = true">Show Tree</button>
+          </div>
         </div>
       </div>
 
@@ -20,7 +23,7 @@
         <div 
           v-if="currentPlayer === playerTurn && hoveredColumn !== -1 && !isProcessing" 
           class="hover-disc player-disc"
-          :style="{ left: `${hoveredColumn * 80 + 22  }px` }"
+          :style="{ left: `${hoveredColumn * 80 + 22}px` }"
         ></div>
         
         <div class="board">
@@ -48,9 +51,19 @@
           </div>
         </div>
       </div>
-
-      <TreeVisualization class="tree-viz" :treeData="treeData" />
     </div>
+
+    <!-- <TreeModal 
+      :show="showTreeModal"
+      :treeData="treeData"
+      @close="showTreeModal = false"
+    /> -->
+    <TreeModal 
+      v-if="showTreeModal"
+      :v-show="showTreeModal"
+      :treeData="treeData"
+      @close="showTreeModal = false"
+    />
   </div>
 </template>
 
@@ -58,13 +71,16 @@
 import { ref, onMounted, inject } from 'vue'
 import ScoreBoard from './ScoreBoard.vue'
 import TreeVisualization from './TreeVisualization.vue'
+//treex
+import TreeModal from './TreeModal.vue'
 import { gameService } from '../services/gameService'
 
 export default {
   name: 'GameBoard',
   components: {
     ScoreBoard,
-    TreeVisualization
+    // TreeVisualization
+    TreeModal
   },
   props: {
     settings: {
@@ -76,6 +92,7 @@ export default {
     const showMenu = inject('showMenu')
     const board = ref(Array(6).fill().map(() => Array(7).fill(0)))
     const playerTurn = ref(props.settings.playerTurn);
+    const aiTurn = ref(props.settings.aiTurn);
     const currentPlayer = ref(1) // 1 for player, 2 for AI
     const playerScore = ref(0)
     const aiScore = ref(0)
@@ -84,13 +101,16 @@ export default {
     const hoveredColumn = ref(-1)
     const isProcessing = ref(false)
     const treeData = ref(null); // Ref to hold dynamic game tree data
+    // treex
+    const showTreeModal = ref(false)
+
     // Initialize game with settings
     onMounted(() => {
       // console.log('GameBoard mounted')
       // console.log(JSON.stringify(props.settings, null, 2))
       // console.log(playerTurn.value)
       if(playerTurn.value === 2) {
-        aiAgentStart()
+        aiAgentTurn()
       }
     })
     
@@ -109,28 +129,24 @@ export default {
 
       board.value[row][col] = playerTurn.value
 
-      console.log("after player move")
-      isProcessing.value = true
-      gameStatus.value = 'AI is thinking...'
-      
-      await updateValues();
-      isProcessing.value = false
-      gameStatus.value = 'Your Turn'
+      // console.log("after player move")
+      aiAgentTurn()
     }
-    const aiAgentStart = async () => {
+    const aiAgentTurn = async () => {
       isProcessing.value = true
       gameStatus.value = 'AI is thinking...'
-      currentPlayer.value = 1
+      currentPlayer.value =  aiTurn.value
 
       await updateValues();
 
       isProcessing.value = false
       gameStatus.value = 'Your Turn'
-      currentPlayer.value = 2
+      currentPlayer.value = playerTurn.value
       // console.log(currentPlayer.value, playerTurn.value, isProcessing.value)
     }
     const updateValues = async () => {
       const response = await gameService.sendGameInfoToBackend(board.value,props.settings)
+      console.log("response arrived")
       if (response) {
         board.value = response.board
         playerScore.value = response.playerScore
@@ -165,7 +181,7 @@ export default {
 
     return {
       board,
-      aiTurn: props.settings.aiTurn,
+      aiTurn,
       playerTurn,
       currentPlayer,
       playerScore,
@@ -178,7 +194,8 @@ export default {
       handleMouseMove,
       handleMouseLeave,
       isProcessing,
-      treeData
+      treeData,
+      showTreeModal
     }
   }
 }
@@ -221,7 +238,22 @@ export default {
   margin-bottom: 1rem;
 }
 
-.new-game-btn {
+/* .new-game-btn {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+} */
+.button-container {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.game-btn {
   background: #4CAF50;
   color: white;
   border: none;
@@ -231,6 +263,9 @@ export default {
   transition: background-color 0.3s ease;
 }
 
+.show-tree-btn {
+  background: #2196F3;
+}
 .new-game-btn:hover {
   background: #45a049;
 }
