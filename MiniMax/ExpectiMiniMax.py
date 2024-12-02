@@ -90,7 +90,7 @@ class ExpectiMiniMax(MiniMax):
         max_score = float('-inf')
         # print(self.cache)
         for move in self.get_possible_moves(board):
-            extra = self.FastHeuristic.heurstic(board, self.player, move)
+            extra = self.FastHeuristic.heuristic(board, self.player, move)
             self.nodes_expanded += 1
             score = self.chance(board, move, False, root, depth - 1, extra)
             if score > max_score:
@@ -115,7 +115,7 @@ class ExpectiMiniMax(MiniMax):
         for move in self.get_possible_moves(board):
             extra = self.FastHeuristic.heuristic(board, self.player, move)
             self.nodes_expanded += 1
-            score = self.chance(board, move, True, root, depth - 1)
+            score = self.chance(board, move, True, root, depth - 1, extra)
             if score < min_score:
                 min_score = score
                 best_move = move

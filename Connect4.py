@@ -26,7 +26,7 @@ if __name__ == "__main__":
     ai_player = 2  # AI player
     max_depth = 8
 
-    algorithm = algorithms_factory.get_algorithm(1, heuristic, board, ai_player, max_depth)
+    algorithm = algorithms_factory.get_algorithm(3, heuristic, board, ai_player, max_depth)
 
     print("Welcome to Connect Four! You are Player 1.")
     print_board(board)
