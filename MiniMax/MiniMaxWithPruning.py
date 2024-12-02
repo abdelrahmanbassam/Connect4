@@ -45,6 +45,7 @@ class MiniMaxWithPruning(MiniMax):
             new_board = self.make_move(board, move, self.opponent(self.player))
             child = Node(float('-inf'), "MAX", move)
             root.add_successor(child)
+            self.nodes_expanded += 1
             score, _ = self.maximize(new_board, depth - 1, child, alpha, beta, extra)
             beta = min(beta, score)
             if score < min_score:
