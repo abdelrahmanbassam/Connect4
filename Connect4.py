@@ -24,7 +24,7 @@ if __name__ == "__main__":
     board = [[0 for _ in range(7)] for _ in range(6)]  # 6x7 Connect Four board
     player = 1  # Human player
     ai_player = 2  # AI player
-    max_depth = 1
+    max_depth = 16
 
     algorithm = algorithms_factory.get_algorithm(3, heuristic, board, ai_player, max_depth)
 
