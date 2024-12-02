@@ -9,13 +9,9 @@ class MiniMaxWithPruning(MiniMax):
         self.FastHeuristic = HeuristicsFactory().get_heuristic("FastHeuristic")
 
     def maximize(self, board, depth, root, alpha=float('-inf'), beta=float('inf'), extra=0):
-        if self.hash_board(board) in self.cache:
-            root.value, best = self.cache[self.hash_board(board)]
-            return root.value, best
         if depth == 0 or self.is_terminal(board):
             score = (self.heuristic.heuristic(board, self.player) + extra) * self.sign
             root.value = score
-            self.cache[self.hash_board(board)] = score, None
             return score, None
         best_move = None
         max_score = float('-inf')
@@ -34,17 +30,12 @@ class MiniMaxWithPruning(MiniMax):
             if alpha >= beta:
                 break
         root.value = max_score
-        self.cache[self.hash_board(board)] = max_score, best_move
         return max_score, best_move
 
     def minimize(self, board, depth, root, alpha=float('-inf'), beta=float('inf'), extra=0):
-        if self.hash_board(board) in self.cache:
-            root.value, best = self.cache[self.hash_board(board)]
-            return root.value, best
         if depth == 0 or self.is_terminal(board):
             score = (self.heuristic.heuristic(board, self.player) + extra) * self.sign
             root.value = score
-            self.cache[self.hash_board(board)] = score, None
             return score, None
 
         best_move = None
@@ -62,5 +53,4 @@ class MiniMaxWithPruning(MiniMax):
             if alpha >= beta:
                 break
         root.value = min_score
-        self.cache[self.hash_board(board)] = min_score, best_move
         return min_score, best_move
