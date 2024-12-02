@@ -34,14 +34,14 @@ class MiniMaxWithPruning(MiniMax):
 
     def minimize(self, board, depth, root, alpha=float('-inf'), beta=float('inf'), extra=0):
         if depth == 0 or self.is_terminal(board):
-            score = (self.heuristic.heuristic(board, self.opponent(self.player)) + extra) * self.sign
+            score = (self.heuristic.heuristic(board, self.player) + extra) * self.sign
             root.value = score
             return score, None
 
         best_move = None
         min_score = float('inf')
         for move in self.get_possible_moves(board):
-            extra = self.FastHeuristic.heuristic(board, self.opponent(self.player), move)
+            extra = self.FastHeuristic.heuristic(board, self.player, move)
             new_board = self.make_move(board, move, self.opponent(self.player))
             child = Node(float('-inf'), "MAX", move)
             root.add_successor(child)
