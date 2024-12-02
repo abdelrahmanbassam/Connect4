@@ -6,11 +6,11 @@
         <button class="close-btn" @click="$emit('close')">×</button>
       </div>
       <div class="tree-container">
+        <div class="demo-control-panel">
+          <button class="control-btn" @click="updateLayout('LR')">Left to Right</button>
+          <button class="control-btn" @click="updateLayout('TB')">Top to Bottom</button>
+        </div>
         <div class="visualization-area">
-          <div class="demo-control-panel">
-            <button class="control-btn" @click="updateLayout('LR')">Left to Right</button>
-            <button class="control-btn" @click="updateLayout('TB')">Top to Bottom</button>
-          </div>
           <v-network-graph
             ref="graph"
             class="graph"
@@ -269,7 +269,7 @@ function updateLayout(direction) {
 }
 
 .graph {
-  height: calc(100% - 50px);
+  height: calc(90% - 50px);
   width: 100%;
 }
 </style>
