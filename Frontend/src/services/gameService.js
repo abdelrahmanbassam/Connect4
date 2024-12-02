@@ -35,7 +35,7 @@ export const gameService = {
       return null;
     }
   },
-  // Temporary mock AI move - will be replaced by backend
+  // Temporary mock AI move untill we merg with the backend
   mockAIMove(board) {
     const newBoard = board.map(row => [...row]);
     const availableCols = [];
