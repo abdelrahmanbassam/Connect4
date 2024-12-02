@@ -1,5 +1,7 @@
 from Heuristic.heuristics_factory import HeuristicsFactory
 from Tree import Node
+import numpy as np
+import hashlib
 class MiniMax:
     def __init__(self, heuristic, board, player, max_depth):
         self.heuristic = heuristic
@@ -11,6 +13,12 @@ class MiniMax:
         self.best_move = None
         self.root = None
         self.nodes_expanded = 0
+        self.cache = {}
+
+    def hash_board(self, board:list):
+        temp = np.array(board)
+        hash = hashlib.sha1(temp.tobytes()).hexdigest()
+        return hash
     
     def maximize(self, board, depth, root):
         pass

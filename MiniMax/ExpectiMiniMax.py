@@ -6,12 +6,6 @@ import numpy as np
 class ExpectiMiniMax(MiniMax):
     def __init__(self, heuristic, board, player, max_depth):
         super().__init__(heuristic, board, player, max_depth)
-        self.cache = {}
-
-    def hash_board(self, board:list):
-        temp = np.array(board)
-        hash = hashlib.sha1(temp.tobytes()).hexdigest()
-        return hash
     
     def chance(self, board, selected_move, next_turn_maximizing:bool, root, depth):
         probs = {"left": 0.2, "right": 0.2, "current": 0.6}
