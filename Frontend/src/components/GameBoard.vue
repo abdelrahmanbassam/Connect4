@@ -53,7 +53,7 @@
       </div>
     </div>
 
-    <TreeModal 
+    <TreeVisualization 
       :show="showTreeModal"
       :treeData="treeFromBack"
       @close="showTreeModal = false"
@@ -67,15 +67,15 @@ import { ref, onMounted, inject } from 'vue'
 import ScoreBoard from './ScoreBoard.vue'
 import TreeVisualization from './TreeVisualization.vue'
 //treex
-import TreeModal from './TreeModal.vue'
+// import TreeModal from './TreeModal.vue'
 import { gameService } from '../services/gameService'
 
 export default {
   name: 'GameBoard',
   components: {
     ScoreBoard,
-    // TreeVisualization
-    TreeModal
+    TreeVisualization
+    // TreeModal
   },
   props: {
     settings: {
