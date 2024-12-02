@@ -38,7 +38,7 @@ class MiniMaxWoPruning(MiniMax):
             root.value, best = self.cache[self.hash_board(board)]
             return root.value, best
         if depth == 0 or self.is_terminal(board):
-            score = (self.heuristic.heuristic(board, self.player) + extra) * self.sign
+            score = (self.heuristic.heuristic(board, self.opponent(self.player)) + extra) * self.sign
             root.value = score
             self.cache[self.hash_board(board)] = score, None
             return score, None
@@ -46,7 +46,7 @@ class MiniMaxWoPruning(MiniMax):
         best_move = None
         min_score = float('inf')
         for move in self.get_possible_moves(board):
-            extra = self.FastHeuristic.heuristic(board, self.player, move)
+            extra = self.FastHeuristic.heuristic(board, self.opponent(self.player), move)
             new_board = self.make_move(board, move, self.opponent(self.player))
             child = Node(float('-inf'), "MAX", move)
             root.add_successor(child)

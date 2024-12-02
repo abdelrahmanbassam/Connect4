@@ -6,7 +6,7 @@ class ExpectiMiniMax(MiniMax):
     def __init__(self, heuristic, board, player, max_depth,):
         super().__init__(heuristic, board, player, max_depth)
         self.FastHeuristic = HeuristicsFactory().get_heuristic("FastHeuristic")
-        
+
     def chance(self, board, selected_move, next_turn_maximizing:bool, root, depth, extra):
         probs = {"left": 0.2, "right": 0.2, "current": 0.6}
         chance_node = Node(0.0, "CHANCE", selected_move)
@@ -105,7 +105,7 @@ class ExpectiMiniMax(MiniMax):
             root.value, best = self.cache[self.hash_board(board)]
             return root.value, best
         if depth == 0 or self.is_terminal(board):
-            score = (self.heuristic.heuristic(board, self.player) + extra)* self.sign
+            score = (self.heuristic.heuristic(board, self.opponent(self.player)) + extra)* self.sign
             root.value = score
             self.cache[self.hash_board(board)] = score, None
             return score, None
@@ -113,7 +113,7 @@ class ExpectiMiniMax(MiniMax):
         best_move = None
         min_score = float('inf')
         for move in self.get_possible_moves(board):
-            extra = self.FastHeuristic.heuristic(board, self.player, move)
+            extra = self.FastHeuristic.heuristic(board, self.opponent(self.player), move)
             self.nodes_expanded += 1
             score = self.chance(board, move, True, root, depth - 1)
             if score < min_score:
