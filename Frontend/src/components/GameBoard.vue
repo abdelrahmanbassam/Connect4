@@ -76,6 +76,7 @@ export default {
     const showMenu = inject('showMenu')
     const board = ref(Array(6).fill().map(() => Array(7).fill(0)))
     const playerTurn = ref(props.settings.playerTurn);
+    const aiTurn = ref(props.settings.aiTurn);
     const currentPlayer = ref(1) // 1 for player, 2 for AI
     const playerScore = ref(0)
     const aiScore = ref(0)
@@ -90,7 +91,7 @@ export default {
       // console.log(JSON.stringify(props.settings, null, 2))
       // console.log(playerTurn.value)
       if(playerTurn.value === 2) {
-        aiAgentStart()
+        aiAgentTurn()
       }
     })
     
@@ -109,24 +110,19 @@ export default {
 
       board.value[row][col] = playerTurn.value
 
-      console.log("after player move")
-      isProcessing.value = true
-      gameStatus.value = 'AI is thinking...'
-      
-      await updateValues();
-      isProcessing.value = false
-      gameStatus.value = 'Your Turn'
+      // console.log("after player move")
+      aiAgentTurn()
     }
-    const aiAgentStart = async () => {
+    const aiAgentTurn = async () => {
       isProcessing.value = true
       gameStatus.value = 'AI is thinking...'
-      currentPlayer.value = 1
+      currentPlayer.value =  aiTurn.value
 
       await updateValues();
 
       isProcessing.value = false
       gameStatus.value = 'Your Turn'
-      currentPlayer.value = 2
+      currentPlayer.value = playerTurn.value
       // console.log(currentPlayer.value, playerTurn.value, isProcessing.value)
     }
     const updateValues = async () => {
@@ -165,7 +161,7 @@ export default {
 
     return {
       board,
-      aiTurn: props.settings.aiTurn,
+      aiTurn,
       playerTurn,
       currentPlayer,
       playerScore,
