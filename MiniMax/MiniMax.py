@@ -42,6 +42,7 @@ class MiniMax:
         sorted_moves = sorted(moves, key=lambda x: abs(len(board) // 2 - x))
         return sorted_moves
 
+
     def make_move(self, board, move, player):
         new_board = [row[:] for row in board]
         for r in range(len(new_board) - 1, -1, -1):

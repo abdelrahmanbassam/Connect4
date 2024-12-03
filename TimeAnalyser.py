@@ -7,8 +7,8 @@ class TimeAnalyser:
     def __init__(self):
         self.heuristic = HeuristicsFactory().get_heuristic("ConsecutiveCounts")
         self.algorithms = {
-            "MiniMax": 1,
-            "MiniMaxWithPruning": 2,
+            # "MiniMax": 1,
+            # "MiniMaxWithPruning": 2,
             "Expecti": 3
         }
         self.results = {
@@ -16,9 +16,10 @@ class TimeAnalyser:
             "nodes": {name: [] for name in self.algorithms}
         }
 
-    def compare_algorithms(self, board, max_depth=5):
-        for depth in range(1, max_depth + 1):
+    def compare_algorithms(self, board, max_depth = 10):
+        for depth in range(2, max_depth + 1,2):
             for name, alg_id in self.algorithms.items():
+                print("depth",depth)
                 algorithm = AlgorithmsFactory().get_algorithm(alg_id, self.heuristic, board, 1, depth)
                 start_time = time.time()
                 algorithm.minimax(board, depth)
@@ -31,9 +32,10 @@ class TimeAnalyser:
         for name in self.algorithms:
             print(f"\n{name}")
             for i, depth in enumerate(depths):
+                # print ("depth",depth)
                 nodes_expanded = self.results["nodes"][name][i]
                 time_taken = self.results["time"][name][i]
-                print(f"depth = {depth} nodes_expanded = {nodes_expanded} time taken = {time_taken}")
+                print(f"depth = {depth*2} nodes_expanded = {nodes_expanded} time taken = {time_taken}")
 
 
     def plot_results(self):
@@ -75,4 +77,4 @@ if __name__ == "__main__":
     analyser = TimeAnalyser()
     analyser.compare_algorithms(board)
     analyser.print_results_table()
-    analyser.plot_results()
+    # analyser.plot_results()

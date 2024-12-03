@@ -164,18 +164,34 @@ function layout(direction) {
   Object.entries(data.nodes).forEach(([nodeId, node]) => {
     g.setNode(nodeId, { label: node.name, width: nodeSize, height: nodeSize });
   });
+ 
+  // const sortedEdges = Object.values(data.edges).sort((a, b) => parseInt(a.label) - parseInt(b.label));
+  // sortedEdges.forEach((edge) => {
+  //   g.setEdge(edge.source, edge.target, {label: edge.label});
+  // });
 
-  Object.values(data.edges).forEach((edge) => {
-    g.setEdge(edge.source, edge.target, {label: edge.label});
+  const desiredOrder = [3, 2, 4, 1, 5, 0, 6];
+  const orderMap = {};
+  desiredOrder.forEach((label, index) => {
+    orderMap[label] = index;
+  });
+  const sortedEdges = Object.values(data.edges).sort((a, b) => {
+    return orderMap[parseInt(a.label)] - orderMap[parseInt(b.label)];
   });
 
+  sortedEdges.forEach((edge) => {
+    g.setEdge(edge.source, edge.target, { label: edge.label });
+  });
+  // Object.values(data.edges).forEach((edge) => {
+  //   g.setEdge(edge.source, edge.target, {label: edge.label});
+  // });
   dagre.layout(g);
-
   g.nodes().forEach((nodeId) => {
     const x = g.node(nodeId).x;
     const y = g.node(nodeId).y;
     data.layouts.nodes[nodeId] = { x, y };
   });
+  
 }
 
 function updateLayout(direction) {
