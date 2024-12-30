@@ -67,8 +67,7 @@ The heuristic for the minimax algorithm consists of two components:
 
 The time complexity analysis for MiniMax, MiniMax with Alpha-Beta Pruning, and Expectiminimax algorithms is shown below:
 
-| Depth | MiniMax Nodes | MiniMax Time (s) | Pruning Nodes | Pruning Time (s) | Expecti Nodes
-(with memo) | Expecti Time (s)(with memo) |
+| Depth | MiniMax Nodes | MiniMax Time (s) | Pruning Nodes | Pruning Time (s) | Expecti Nodes(with memo) | Expecti Time (s)(with memo) |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1 | 8 | 0.001 | 8 | 0.001 | null | null |
 | 2 | 57 | 0.003 | 24 | 0.001 | 27 | 0.000 |
