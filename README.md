@@ -4,7 +4,7 @@
 
 Connect 4 is a strategy game for two players. Each player drops colored discs into a vertical grid. The goal is to make as many "connect-fours" as possible—this means getting four of your discs in a row vertically, horizontally, or diagonally. The winner is the player with the most "connect-fours" when the board is full.
 
-This implementation has a human vs. computer mode where the computer uses artificial intelligence (AI) to play .
+This implementation has a human vs. computer mode where the computer uses artificial intelligence (AI) to play.
 
 ![image.png](./assets/image.png)
 
